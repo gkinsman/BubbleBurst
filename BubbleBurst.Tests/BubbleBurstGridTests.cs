@@ -17,7 +17,7 @@ namespace BubbleBurst.Tests
         private Builder _grid;
 
         [SetUp]
-        public void MyTestInitialize()
+        public void Setup()
         {
             _grid = BubbleGridBuilder.Create(new[]
                                              {
@@ -27,7 +27,6 @@ namespace BubbleBurst.Tests
                                              }).ToBuilder();
 
         }
-
 
         [Test]
         public void BubbleGrid_Builder_ShouldBuildCorrectly()
@@ -187,7 +186,7 @@ namespace BubbleBurst.Tests
 
             Console.WriteLine("Removing empty columns...");
 
-            _grid.RemoveEmptyColumns();
+            _grid.PushColumnsRight();
 
             _grid.ToImmutable().Display();
 
@@ -207,7 +206,7 @@ namespace BubbleBurst.Tests
 
             Console.WriteLine("Removing empty columns...");
 
-            _grid.RemoveEmptyColumns();
+            _grid.PushColumnsRight();
 
             _grid.ToImmutable().Display();
 
@@ -240,7 +239,7 @@ namespace BubbleBurst.Tests
             _grid.ToImmutable().Display();
 
             _grid.JumpTillTheresNoGaps();
-            _grid.RemoveEmptyColumns();
+            _grid.PushColumnsRight();
 
             
             Console.WriteLine("Actual:");

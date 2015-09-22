@@ -120,7 +120,7 @@ namespace BubbleBurst.Game.Extensions
             return Join(",", points.Select(x => $"({x.X},{x.Y})"));
         }
 
-        public static void RemoveEmptyColumns(this Builder grid)
+        public static void PushColumnsRight(this Builder grid)
         {
             var adjustment = 0;
 
@@ -174,7 +174,7 @@ namespace BubbleBurst.Game.Extensions
             }
 
             gridBuilder.JumpTillTheresNoGaps();
-            gridBuilder.RemoveEmptyColumns();
+            gridBuilder.PushColumnsRight();
 
             return Tuple.Create(gridBuilder.ToImmutable(), pointsGroup.Score);
         }

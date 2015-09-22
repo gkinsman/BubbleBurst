@@ -23,7 +23,13 @@ namespace BubbleBurst.Game
             GridState = gridState;
         }
 
-        public Point Point { get; }
+        public GameMove(ImmutableBubbleBurstGrid grid)
+        {
+            Score = 0;
+            GridState = grid;
+        }
+
+        public Point? Point { get; }
         public int Score { get; }
 
         public ImmutableBubbleBurstGrid GridState { get; }

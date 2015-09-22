@@ -15,7 +15,7 @@ namespace BubbleBurst.Game
         public HashSet<Point> Points { get; set; }
         public Bubble Colour { get; set; }
 
-        public int Score { get { return Points.Count * (Points.Count - 1); } }
+        public int Score => Points.Count * (Points.Count - 1);
 
         public bool Equals(BubbleGroup other)
         {
