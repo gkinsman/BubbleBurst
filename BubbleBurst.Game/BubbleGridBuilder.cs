@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -59,8 +60,7 @@ namespace BubbleBurst.Game
         {
             var result = ImmutableList.CreateBuilder<ImmutableList<Bubble>.Builder>();
 
-            var width = grid.Length;
-            var height = grid[0].Length;
+            var height = grid.Length;
 
             for (var i = 0; i < height; i++)
             {
@@ -70,7 +70,8 @@ namespace BubbleBurst.Game
             //create grid from list of string values
             for (var i = 0; i < height; i++)
             {
-                result[i] = ImmutableList.CreateBuilder<Bubble>();
+                Debug.WriteLine($"Adding {string.Join(",", grid[i])} to position ({i})");
+
                 result[i].AddRange(grid[i]);
             }
 

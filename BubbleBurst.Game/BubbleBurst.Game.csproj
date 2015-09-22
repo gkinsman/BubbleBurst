@@ -54,6 +54,7 @@
     <Compile Include="BubbleGroupFinder.cs" />
     <Compile Include="Extensions\BubbleExtensions.cs" />
     <Compile Include="Extensions\GridUtils.cs" />
+    <Compile Include="ImmutableGridBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

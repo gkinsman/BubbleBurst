@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using static System.String;
 using InternalGrid =
     System.Collections.Immutable.ImmutableList<System.Collections.Immutable.ImmutableList<BubbleBurst.Game.Bubble>>;
 using InternalGridBuilder =
@@ -49,31 +50,31 @@ namespace BubbleBurst.Game.Extensions
 
         public static int Height(this InternalGrid grid)
         {
-            return grid[0].Count;
+            return grid.Count;
         }
 
         public static int Width(this InternalGrid grid)
         {
-            return grid.Count;
+            return grid[0].Count;
         }
 
         public static int Height(this InternalGridBuilder.Builder grid)
         {
-            return grid[0].Count;
+            return grid.Count;
         }
 
         public static int Width(this InternalGridBuilder.Builder grid)
         {
-            return grid.Count;
+            return grid[0].Count;
         }
 
         public static void Display(this ImmutableBubbleBurstGrid grid)
         {
-            for (int i = grid.Height - 1; i >= 0; i--)
+            for (var row = 0; row < grid.Height; row++)
             {
-                for (int j = grid.Width - 1; j >= 0; j--)
+                for (var col = 0; col < grid.Width; col++)
                 {
-                    var current = grid[j, i].ToString()[0];
+                    var current = grid[col, row].ToString()[0];
                     if (current != 'N')
                     {
                         switch (current)
@@ -104,66 +105,51 @@ namespace BubbleBurst.Game.Extensions
                         Console.Write("  ");
                     }
                 }
-                Console.Write((grid.Height - 1) - i + " ");
+                Console.Write(row + " ");
                 Console.Write(Environment.NewLine);
             }
-            for (int a = 0; a < grid.Width; a++)
+            for (var a = 0; a < grid.Width; a++)
             {
-                Console.Write((grid.Width - 1) - a + " ");
+                Console.Write(a + " ");
             }
             Console.WriteLine();
         }
 
         public static string DisplayPoints(this List<Point> points)
         {
-            var retVal = "";
-
-            foreach (var item in points)
-            {
-                retVal = String.Concat(retVal, String.Format("({0},{1}), ", item.X, item.Y));
-            }
-            retVal = retVal.Trim(',');
-
-            return retVal;
+            return Join(",", points.Select(x => $"({x.X},{x.Y})"));
         }
 
-        /// <summary>
-        /// All mutator methods accept a BubbleGrid and return the same. Grids are immutable
-        /// </summary>
-        /// <param name="grid"></param>
-        /// <returns></returns>
         public static void RemoveEmptyColumns(this Builder grid)
         {
-            int adjustment = 0;
+            var adjustment = 0;
 
-            for (int k = 0; k < grid.Width; k++)
+            for (var col = grid.Width -1; col >= 0; col--)
             {
                 //check if every element in the column is none
-                bool allNone = true;
-                for (int a = 0; a < grid.Height; a++)
+                var allNone = true;
+                for (var a = 0; a < grid.Height; a++)
                 {
-                    if (grid[k, a] != Bubble.None)
+                    if (grid[col, a] != Bubble.None)
                     {
                         allNone = false;
                     }
                 }
 
                 if (!allNone) continue;
-                adjustment++;
 
                 //empty column
-                for (int i = k + 1; i < grid.Width; i++)
+                for (var i = col; i >= 0; i--)
                 {
-                    bool allNone2 = true;
-                    for (int row = 0; row < grid.Height; row++)
+                    var allNone2 = true;
+                    for (var row = grid.Height -1; row >= 0; row--)
                     {
-                        if (grid[i, row] != Bubble.None)
-                        {
-                            allNone2 = false;
-                            var colour = grid[i, row];
-                            grid[i, row] = Bubble.None;
-                            grid[i - adjustment, row] = colour;
-                        }
+                        if (grid[i, row] == Bubble.None) continue;
+
+                        allNone2 = false;
+                        var colour = grid[i, row];
+                        grid[i, row] = Bubble.None;
+                        grid[i + adjustment, row] = colour;
                     }
                     if (allNone2)
                         adjustment++;
@@ -181,25 +167,24 @@ namespace BubbleBurst.Game.Extensions
                 throw new ArgumentException(
                     $"Invalid move - Point ({point.X},{point.Y}) does not belong to a valid group");
 
-
             var gridBuilder = grid.ToBuilder();
             foreach (var bubble in pointsGroup.Points)
             {
                 gridBuilder[bubble.X, bubble.Y] = Bubble.None;
             }
 
-            gridBuilder.CoalesceColumns();
+            gridBuilder.JumpTillTheresNoGaps();
             gridBuilder.RemoveEmptyColumns();
 
             return Tuple.Create(gridBuilder.ToImmutable(), pointsGroup.Score);
         }
 
-        public static void CoalesceColumns(this Builder grid)
+        public static void JumpTillTheresNoGaps(this Builder grid)
         {
-            for (int col = 0; col < grid.Width; col++)
+            for (var col = 0; col < grid.Width; col++)
             {
-                int adjustment = 0;
-                for (int row = 0; row < grid.Height; row++)
+                var adjustment = 0;
+                for (var row = grid.Height -1; row >= 0 ; row--)
                 {
                     var adjusted = false;
                     if (grid[col, row] == Bubble.None)
@@ -219,7 +204,7 @@ namespace BubbleBurst.Game.Extensions
                     }
                     var colour = grid[col, row];
                     grid[col, row] = Bubble.None;
-                    grid[col, row - adjustment] = colour;
+                    grid[col, row + adjustment] = colour;
                 }
             }
         }
@@ -227,7 +212,7 @@ namespace BubbleBurst.Game.Extensions
 
         public static bool IsLegal(this ImmutableBubbleBurstGrid grid, Point point)
         {
-            bool returnBool = true;
+            var returnBool = true;
 
             if (point.X < 0 || point.X >= grid.Width)
             {

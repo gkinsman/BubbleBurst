@@ -9,9 +9,6 @@ using System.Linq;
 using BubbleBurst.Game.Extensions;
 using InternalGrid =
     System.Collections.Immutable.ImmutableList<System.Collections.Immutable.ImmutableList<BubbleBurst.Game.Bubble>>;
-using InternalGridBuilder =
-    System.Collections.Immutable.ImmutableList
-        <System.Collections.Immutable.ImmutableList<BubbleBurst.Game.Bubble>.Builder>;
 
 namespace BubbleBurst.Game
 {
@@ -32,7 +29,7 @@ namespace BubbleBurst.Game
 
         private readonly BubbleGroupFinder _groupFinder;
 
-        private readonly Dictionary<Bubble, int> _bubbleCounts;
+        //private readonly Dictionary<Bubble, int> _bubbleCounts;
 
         public ImmutableBubbleBurstGrid(InternalGrid grid)
         {
@@ -41,10 +38,10 @@ namespace BubbleBurst.Game
             Height = grid.Height();
             _groupFinder = new BubbleGroupFinder(this);
 
-            _bubbleCounts = GetCounts(grid);
+            //_bubbleCounts = GetStats(grid);
         }
 
-        private static Dictionary<Bubble, int> GetCounts(InternalGrid grid)
+/*        private static Dictionary<Bubble, int> GetStats(InternalGrid grid)
         {
             var dict = new Dictionary<Bubble, int>();
 
@@ -59,7 +56,7 @@ namespace BubbleBurst.Game
             }
 
             return dict;
-        }
+        }*/
 
         /// <summary>
         /// Returns the element where [0,0] is at the bottom right
@@ -67,14 +64,7 @@ namespace BubbleBurst.Game
         /// <param name="col">represents the horizontal index</param>
         /// <param name="row">represents the vertical index</param>
         /// <returns></returns>
-        public Bubble this[int col, int row]
-        {
-            get
-            {
-                var transposedPoint = new Point(col, row).Transpose(Width, Height);
-                return Grid[transposedPoint.X][transposedPoint.Y];
-            }
-        }
+        public Bubble this[int col, int row] => Grid[row][col];
 
         public override string ToString()
         {
@@ -86,7 +76,7 @@ namespace BubbleBurst.Game
             return Grid.GetHashCode();
         }
 
-        private InternalGrid Grid { get; set; }
+        private InternalGrid Grid { get; }
 
         public bool Equals(ImmutableBubbleBurstGrid other)
         {
@@ -104,37 +94,5 @@ namespace BubbleBurst.Game
 
             return true;
         }
-    }
-
-    public class Builder
-    {
-        private readonly InternalGridBuilder.Builder _gridBuilder;
-
-        internal Builder(InternalGridBuilder.Builder grid)
-        {
-            this._gridBuilder = grid;
-        }
-
-        public ImmutableBubbleBurstGrid ToImmutable()
-        {
-            return new ImmutableBubbleBurstGrid(_gridBuilder.ToImmutableGrid());
-        }
-
-        public Bubble this[int col, int row]
-        {
-            get
-            {
-                var point = new Point(col, row).Transpose(_gridBuilder.Count, _gridBuilder[0].Count);
-                return _gridBuilder[point.X][point.Y];
-            }
-            set
-            {
-                var point = new Point(col, row).Transpose(_gridBuilder.Count, _gridBuilder[0].Count);
-                this._gridBuilder[point.X][point.Y] = value;
-            }
-        }
-
-        public int Width => _gridBuilder.Width();
-        public int Height => _gridBuilder.Height();
     }
 }
