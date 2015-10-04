@@ -8,7 +8,7 @@
         Red,
         Yellow,
         Green,
-        Purple
+        Cyan
     };
 
 }

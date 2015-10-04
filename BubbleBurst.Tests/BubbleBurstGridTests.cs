@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Tracing;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using BubbleBurst.Game;
 using BubbleBurst.Game.Extensions;
 using NUnit.Framework;
@@ -20,12 +13,11 @@ namespace BubbleBurst.Tests
         public void Setup()
         {
             _grid = BubbleGridBuilder.Create(new[]
-                                             {
-                                                 new[] {Bubble.Blue, Bubble.Green, Bubble.Purple, Bubble.Blue},
-                                                 new[] {Bubble.Red, Bubble.Green, Bubble.Red, Bubble.Green},
-                                                 new[] {Bubble.Red, Bubble.Yellow, Bubble.Yellow, Bubble.Blue, }
-                                             }).ToBuilder();
-
+            {
+                new[] {Bubble.Blue, Bubble.Green, Bubble.Cyan, Bubble.Blue},
+                new[] {Bubble.Red, Bubble.Green, Bubble.Red, Bubble.Green},
+                new[] {Bubble.Red, Bubble.Yellow, Bubble.Yellow, Bubble.Blue,}
+            }).ToBuilder();
         }
 
         [Test]
@@ -37,17 +29,17 @@ namespace BubbleBurst.Tests
             Assert.AreEqual(Bubble.Green, _grid[3, 1]);
             Assert.AreEqual(Bubble.Blue, _grid[3, 0]);
 
-            Assert.AreEqual(Bubble.Yellow, _grid[2,2]);
-            Assert.AreEqual(Bubble.Red, _grid[2,1]);
-            Assert.AreEqual(Bubble.Purple, _grid[2,0]);
+            Assert.AreEqual(Bubble.Yellow, _grid[2, 2]);
+            Assert.AreEqual(Bubble.Red, _grid[2, 1]);
+            Assert.AreEqual(Bubble.Cyan, _grid[2, 0]);
 
-            Assert.AreEqual(Bubble.Yellow, _grid[1,2]);
-            Assert.AreEqual(Bubble.Green, _grid[1,1]);
-            Assert.AreEqual(Bubble.Green, _grid[1,0]);
+            Assert.AreEqual(Bubble.Yellow, _grid[1, 2]);
+            Assert.AreEqual(Bubble.Green, _grid[1, 1]);
+            Assert.AreEqual(Bubble.Green, _grid[1, 0]);
 
-            Assert.AreEqual(Bubble.Red, _grid[0,2]);
-            Assert.AreEqual(Bubble.Red, _grid[0,1]);
-            Assert.AreEqual(Bubble.Blue, _grid[0,0]);
+            Assert.AreEqual(Bubble.Red, _grid[0, 2]);
+            Assert.AreEqual(Bubble.Red, _grid[0, 1]);
+            Assert.AreEqual(Bubble.Blue, _grid[0, 0]);
         }
 
         [Test]
@@ -222,26 +214,26 @@ namespace BubbleBurst.Tests
         [Test]
         public void RemoveAndJump_RemoveBottomRightTriangle_ShouldShiftDownAndRight()
         {
-            _grid[3,2] = Bubble.None;
-            _grid[2,2] = Bubble.None;
-            _grid[1,2] = Bubble.None;
-            _grid[3,1] = Bubble.None;
-            _grid[2,1] = Bubble.None;
-            _grid[3,0] = Bubble.None;
+            _grid[3, 2] = Bubble.None;
+            _grid[2, 2] = Bubble.None;
+            _grid[1, 2] = Bubble.None;
+            _grid[3, 1] = Bubble.None;
+            _grid[2, 1] = Bubble.None;
+            _grid[3, 0] = Bubble.None;
 
             var expected = BubbleGridBuilder.Create(new[]
-                                             {
-                                                 new[] {Bubble.None, Bubble.Blue, Bubble.None, Bubble.None},
-                                                 new[] {Bubble.None, Bubble.Red, Bubble.Green, Bubble.None},
-                                                 new[] {Bubble.None, Bubble.Red, Bubble.Green, Bubble.Purple, }
-                                             });
+            {
+                new[] {Bubble.None, Bubble.Blue, Bubble.None, Bubble.None},
+                new[] {Bubble.None, Bubble.Red, Bubble.Green, Bubble.None},
+                new[] {Bubble.None, Bubble.Red, Bubble.Green, Bubble.Cyan,}
+            });
 
             _grid.ToImmutable().Display();
 
             _grid.JumpTillTheresNoGaps();
             _grid.PushColumnsRight();
 
-            
+
             Console.WriteLine("Actual:");
             _grid.ToImmutable().Display();
 
@@ -249,6 +241,6 @@ namespace BubbleBurst.Tests
             expected.Display();
 
             Assert.IsTrue(_grid.ToImmutable().Equals(expected));
-        } 
+        }
     }
 }

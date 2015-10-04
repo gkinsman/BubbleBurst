@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleBurst.Game", "BubbleB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleBurst.Tests", "BubbleBurst.Tests\BubbleBurst.Tests.csproj", "{97F94420-35B2-4BF4-A68E-7B4D598A03BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleBurst.Bot", "BubbleBurst.Bot\BubbleBurst.Bot.csproj", "{891A2D1F-3067-43EC-957D-48AE9E838C60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleBurst.Runner", "BubbleBurst.Runner\BubbleBurst.Runner.csproj", "{C8F046E6-09DC-473B-BBEE-7AC2892C95DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{97F94420-35B2-4BF4-A68E-7B4D598A03BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97F94420-35B2-4BF4-A68E-7B4D598A03BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97F94420-35B2-4BF4-A68E-7B4D598A03BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{891A2D1F-3067-43EC-957D-48AE9E838C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{891A2D1F-3067-43EC-957D-48AE9E838C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{891A2D1F-3067-43EC-957D-48AE9E838C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{891A2D1F-3067-43EC-957D-48AE9E838C60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8F046E6-09DC-473B-BBEE-7AC2892C95DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8F046E6-09DC-473B-BBEE-7AC2892C95DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8F046E6-09DC-473B-BBEE-7AC2892C95DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8F046E6-09DC-473B-BBEE-7AC2892C95DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

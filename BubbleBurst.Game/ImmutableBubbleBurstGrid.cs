@@ -38,32 +38,8 @@ namespace BubbleBurst.Game
             Height = grid.Height();
             _groupFinder = new BubbleGroupFinder(this);
 
-            //_bubbleCounts = GetStats(grid);
         }
 
-/*        private static Dictionary<Bubble, int> GetStats(InternalGrid grid)
-        {
-            var dict = new Dictionary<Bubble, int>();
-
-            for (int i = 0; i < grid.Height(); i++)
-            {
-                for (int j = 0; j < grid.Width(); j++)
-                {
-                    var key = grid[i][j];
-                    if (dict.ContainsKey(key)) dict[key] += 1;
-                    else dict.Add(key, 1);
-                }
-            }
-
-            return dict;
-        }*/
-
-        /// <summary>
-        /// Returns the element where [0,0] is at the bottom right
-        /// </summary>
-        /// <param name="col">represents the horizontal index</param>
-        /// <param name="row">represents the vertical index</param>
-        /// <returns></returns>
         public Bubble this[int col, int row] => Grid[row][col];
 
         public override string ToString()

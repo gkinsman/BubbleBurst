@@ -9,17 +9,17 @@ namespace BubbleBurst.Game
     {
         public BubbleGroup()
         {
-            Points = new HashSet<Point>();
+            Locations = new HashSet<Point>();
         }
 
-        public HashSet<Point> Points { get; set; }
+        public HashSet<Point> Locations { get; set; }
         public Bubble Colour { get; set; }
 
-        public int Score => Points.Count * (Points.Count - 1);
+        public int Score => Locations.Count*(Locations.Count - 1);
 
         public bool Equals(BubbleGroup other)
         {
-            return Colour == other.Colour && Points.SequenceEqual(other.Points);
+            return Colour == other.Colour && Locations.SequenceEqual(other.Locations);
         }
 
         public override bool Equals(object obj)
@@ -30,7 +30,7 @@ namespace BubbleBurst.Game
 
         public override int GetHashCode()
         {
-            return Points.GetHashCode() ^ Colour.GetHashCode();
+            return Locations.GetHashCode() ^ Colour.GetHashCode();
         }
     }
 }

@@ -16,8 +16,8 @@ namespace BubbleBurst.Game.Extensions
                     return Bubble.Yellow;
                 case 'B':
                     return Bubble.Blue;
-                case 'P':
-                    return Bubble.Purple;
+                case 'C':
+                    return Bubble.Cyan;
                 default:
                     throw new ArgumentException("Input character must be G, R, Y, B or P");
             }

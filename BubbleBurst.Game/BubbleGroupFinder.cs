@@ -26,12 +26,12 @@ namespace BubbleBurst.Game
                 for (int j = 0; j < _grid.Width; j++)
                 {
                     //if the current point isnt already part of a bubble group
-                    if (!groups.Any(x => x.Points.Contains(new Point(j, i))))
+                    if (!groups.Any(x => x.Locations.Contains(new Point(j, i))))
                     {
                         //reset current group
                         _currentGroup = new BubbleGroup();
                         FindBubbleGroup(j, i);
-                        if (_currentGroup.Points.Count > 1 && _currentGroup.Colour != Bubble.None)
+                        if (_currentGroup.Locations.Count > 1 && _currentGroup.Colour != Bubble.None)
                         {
                             //new group!
                             groups.Add(_currentGroup);
@@ -44,14 +44,14 @@ namespace BubbleBurst.Game
 
         private void FindBubbleGroup(int x, int y)
         {
-            _currentGroup.Points.Add(new Point(x, y));
+            _currentGroup.Locations.Add(new Point(x, y));
 
             foreach (var match in FindNeighbours(x, y))
             {
                 var current = new Point(match.X, match.Y);
                 _currentGroup.Colour = _grid[x, y];
-                if (_currentGroup.Points.Contains(current)) continue;
-                _currentGroup.Points.Add(current);
+                if (_currentGroup.Locations.Contains(current)) continue;
+                _currentGroup.Locations.Add(current);
                 FindBubbleGroup(match.X, match.Y);
             }
         }

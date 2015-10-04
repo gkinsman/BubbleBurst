@@ -29,31 +29,12 @@ namespace BubbleBurst.Game
                 lines.Add(line);
             }
 
-            // Ensure all rows are the same size
             var width = lines[0].Length;
             Debug.Assert(lines.All(x => x.Length == width));
 
-            var height = lines.Count;
+            var array = lines.Select(x => x.Select(c => c.ToBubble()).ToArray()).ToArray();
 
-            var grid = ImmutableList.CreateBuilder<ImmutableList<Bubble>.Builder>();
-
-            for (var i = 0; i < height; i++)
-            {
-                grid[i] = ImmutableList.CreateBuilder<Bubble>();
-            }
-
-            lines = lines.Select(x => x.ToUpper()).ToList();
-
-            //create grid from list of string values
-            for (var i = 0; i < height; i++)
-            {
-                for (var j = 0; j < width; j++)
-                {
-                    grid[i][j] = lines[i][j].ToBubble();
-                }
-            }
-
-            return new ImmutableBubbleBurstGrid(grid.ToImmutableGrid());
+            return Create(array);
         }
 
         public static ImmutableBubbleBurstGrid Create(Bubble[][] grid)
@@ -67,7 +48,6 @@ namespace BubbleBurst.Game
                 result.Add(ImmutableList.CreateBuilder<Bubble>());
             }
 
-            //create grid from list of string values
             for (var i = 0; i < height; i++)
             {
                 Debug.WriteLine($"Adding {string.Join(",", grid[i])} to position ({i})");

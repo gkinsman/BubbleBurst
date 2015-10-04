@@ -16,10 +16,10 @@ namespace BubbleBurst.Tests
         {
             _grid = BubbleGridBuilder.Create(new[]
                                              {
-                                                 new[] {Bubble.Blue, Bubble.Green, Bubble.Purple, Bubble.Blue},
+                                                 new[] {Bubble.Blue, Bubble.Green, Bubble.Cyan, Bubble.Blue},
                                                  new[] {Bubble.Red, Bubble.Green, Bubble.Red, Bubble.Green},
-                                                 new[] {Bubble.Red, Bubble.Yellow, Bubble.Yellow, Bubble.Purple, },
-                                                 new[] {Bubble.Red, Bubble.Purple, Bubble.Purple, Bubble.Purple, }
+                                                 new[] {Bubble.Red, Bubble.Yellow, Bubble.Yellow, Bubble.Cyan, },
+                                                 new[] {Bubble.Red, Bubble.Cyan, Bubble.Cyan, Bubble.Cyan, }
                                              });
         }
 
@@ -30,9 +30,9 @@ namespace BubbleBurst.Tests
             var expected = BubbleGridBuilder.Create(new[]
                                              {
                                                  new[] {Bubble.Blue,Bubble.None , Bubble.None, Bubble.Blue},
-                                                 new[] {Bubble.Red, Bubble.Green, Bubble.Purple, Bubble.Green},
-                                                 new[] {Bubble.Red, Bubble.Green, Bubble.Red, Bubble.Purple},
-                                                 new[] {Bubble.Red, Bubble.Purple, Bubble.Purple, Bubble.Purple, }
+                                                 new[] {Bubble.Red, Bubble.Green, Bubble.Cyan, Bubble.Green},
+                                                 new[] {Bubble.Red, Bubble.Green, Bubble.Red, Bubble.Cyan},
+                                                 new[] {Bubble.Red, Bubble.Cyan, Bubble.Cyan, Bubble.Cyan, }
                                              });
 
             var move = new GameMove(_grid);
@@ -54,7 +54,7 @@ namespace BubbleBurst.Tests
             var expected = BubbleGridBuilder.Create(new[]
                                              {
                                                  new[] {Bubble.Blue, Bubble.None, Bubble.None, Bubble.None, },
-                                                 new[] {Bubble.Red, Bubble.Green, Bubble.Purple,Bubble.None },
+                                                 new[] {Bubble.Red, Bubble.Green, Bubble.Cyan,Bubble.None },
                                                  new[] {Bubble.Red, Bubble.Green, Bubble.Red, Bubble.Blue },
                                                  new[] {Bubble.Red, Bubble.Yellow, Bubble.Yellow, Bubble.Green }
                                              });
@@ -63,7 +63,7 @@ namespace BubbleBurst.Tests
                                              {
                                                  new[] {Bubble.Blue, Bubble.None, Bubble.None, Bubble.None,},
                                                  new[] {Bubble.Red, Bubble.None, Bubble.None, Bubble.None},
-                                                 new[] {Bubble.Red, Bubble.Green, Bubble.Purple, Bubble.Blue},
+                                                 new[] {Bubble.Red, Bubble.Green, Bubble.Cyan, Bubble.Blue},
                                                  new[] {Bubble.Red, Bubble.Green, Bubble.Red, Bubble.Green}
                                              });
 

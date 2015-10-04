@@ -88,8 +88,8 @@ namespace BubbleBurst.Game.Extensions
                             case 'G':
                                 Console.BackgroundColor = ConsoleColor.Green;
                                 break;
-                            case 'P':
-                                Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                            case 'C':
+                                Console.BackgroundColor = ConsoleColor.Cyan;
                                 break;
                             case 'R':
                                 Console.BackgroundColor = ConsoleColor.Red;
@@ -162,13 +162,13 @@ namespace BubbleBurst.Game.Extensions
             if (!grid.IsLegal(point))
                 throw new ArgumentException($"Invalid move - Point ({point.X},{point.Y}) is invalid in this grid");
 
-            var pointsGroup = grid.Groups.FirstOrDefault(x => x.Points.Contains(point));
+            var pointsGroup = grid.Groups.FirstOrDefault(x => x.Locations.Contains(point));
             if (pointsGroup == null)
                 throw new ArgumentException(
                     $"Invalid move - Point ({point.X},{point.Y}) does not belong to a valid group");
 
             var gridBuilder = grid.ToBuilder();
-            foreach (var bubble in pointsGroup.Points)
+            foreach (var bubble in pointsGroup.Locations)
             {
                 gridBuilder[bubble.X, bubble.Y] = Bubble.None;
             }
