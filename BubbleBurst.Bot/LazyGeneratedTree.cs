@@ -6,7 +6,7 @@ namespace BubbleBurst.Bot
 {
     public class LazyGeneratedTree<T> : SimpleTreeNode<T>
     {
-        public LazyGeneratedTree(T root, Func<T, IEnumerable<T>> generator):base(root)
+        public LazyGeneratedTree(T root, Func<T, IEnumerable<T>> generator) : base(root)
         {
             this.ChildGenerator = generator;
         }
@@ -17,10 +17,16 @@ namespace BubbleBurst.Bot
         {
             this.ChildGenerator = strategy;
         }
-
+            
         public override SimpleTreeNodeList<T> Children
         {
-            get { return new SimpleTreeNodeList<T>(ChildGenerator(this.Value).Select(x => new SimpleTreeNode<T>(x))); }
+            get
+            {
+                return
+                    new SimpleTreeNodeList<T>(
+                        ChildGenerator(this.Value)
+                            .Select(x => new LazyGeneratedTree<T>(x, ChildGenerator)));
+            }
         }
     }
 }

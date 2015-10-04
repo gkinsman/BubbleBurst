@@ -10,7 +10,7 @@ namespace BubbleBurst.Game
             var currentGrid = lastMove.GridState;
             var result = currentGrid.RemoveGroup(point);
 
-            return new GameMove(result.Item1, point, result.Item2);
+            return new GameMove(result.Item1, point, result.Item2 + lastMove.Score);
         }
     }
 
