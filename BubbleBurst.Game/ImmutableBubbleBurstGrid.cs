@@ -29,8 +29,6 @@ namespace BubbleBurst.Game
 
         private readonly BubbleGroupFinder _groupFinder;
 
-        //private readonly Dictionary<Bubble, int> _bubbleCounts;
-
         public ImmutableBubbleBurstGrid(InternalGrid grid)
         {
             Grid = grid;

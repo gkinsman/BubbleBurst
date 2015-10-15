@@ -11,7 +11,7 @@ namespace BubbleBurst.Runner
         private static void Main(string[] args)
         {
             ImmutableBubbleBurstGrid grid;
-            using (var stream = File.OpenRead("Games//Game1.txt"))
+            using (var stream = File.OpenRead("Games//Game2.txt"))
             {
                 grid = BubbleGridBuilder.Create(new StreamReader(stream));
             }

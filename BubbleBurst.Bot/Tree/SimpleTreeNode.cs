@@ -4,6 +4,8 @@
 
 using System;
 using System.Text;
+using BubbleBurst.Bot;
+using DataStructures;
 
 namespace System.Collections.Generic
 {
@@ -11,7 +13,7 @@ namespace System.Collections.Generic
     /// Represents a node in a SimpleTree structure, with a parent node and zero or more child nodes.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class SimpleTreeNode<T> : IDisposable
+    public class SimpleTreeNode<T> : IDisposable, IComparable<SimpleTreeNode<T>> where T : IComparable<T>
     {
         private SimpleTreeNode<T> _Parent;
         public SimpleTreeNode<T> Parent
@@ -167,20 +169,28 @@ namespace System.Collections.Generic
                 yield break;
             }
 
-            var queue = new Queue<SimpleTreeNode<T>>();
-            queue.Enqueue(this);
+            var queue = new ConcurrentPriorityQueue<SimpleTreeNode<T>>();
+            queue.TryAdd(this);
             
             while (queue.Count > 0)
             {
-                SimpleTreeNode<T> node = queue.Dequeue();
+                GridSolver.MoveCount++;
+
+                SimpleTreeNode<T> node = queue.Take();
 
                 foreach (SimpleTreeNode<T> child in node.Children)
                 {
-                    queue.Enqueue(child);
+                    queue.Add(child);
                 }
 
                 yield return node;
             }
+        }
+
+
+        public int CompareTo(SimpleTreeNode<T> other)
+        {
+            return other.Value.CompareTo(Value);
         }
 
         public override string ToString()

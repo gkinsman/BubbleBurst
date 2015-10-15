@@ -157,7 +157,7 @@ namespace BubbleBurst.Game.Extensions
             }
         }
 
-        public static Tuple<ImmutableBubbleBurstGrid, int> RemoveGroup(this ImmutableBubbleBurstGrid grid, Point point)
+        public static Tuple<ImmutableBubbleBurstGrid, int, Bubble> RemoveGroup(this ImmutableBubbleBurstGrid grid, Point point)
         {
             if (!grid.IsLegal(point))
                 throw new ArgumentException($"Invalid move - Point ({point.X},{point.Y}) is invalid in this grid");
@@ -176,7 +176,7 @@ namespace BubbleBurst.Game.Extensions
             gridBuilder.JumpTillTheresNoGaps();
             gridBuilder.PushColumnsRight();
 
-            return Tuple.Create(gridBuilder.ToImmutable(), pointsGroup.Score);
+            return Tuple.Create(gridBuilder.ToImmutable(), pointsGroup.Score, pointsGroup.Colour);
         }
 
         public static void JumpTillTheresNoGaps(this Builder grid)

@@ -11,7 +11,7 @@ namespace System.Collections.Generic
     /// Contains a list of SimpleTreeNode (or SimpleTreeNode-derived) objects, with the capability of linking parents and children in both directions.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class SimpleTreeNodeList<T> : List<SimpleTreeNode<T>>
+    public class SimpleTreeNodeList<T> : List<SimpleTreeNode<T>> where T : IComparable<T>
     {
         public SimpleTreeNode<T> Parent;
 

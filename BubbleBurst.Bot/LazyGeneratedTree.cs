@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BubbleBurst.Bot
 {
-    public class LazyGeneratedTree<T> : SimpleTreeNode<T>
+    public class LazyGeneratedTree<T> : SimpleTreeNode<T> where T : IComparable<T>
     {
         public LazyGeneratedTree(T root, Func<T, IEnumerable<T>> generator) : base(root)
         {
