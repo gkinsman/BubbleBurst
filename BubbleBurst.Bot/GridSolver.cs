@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using BubbleBurst.Game;
+using Serilog;
 
 namespace BubbleBurst.Bot
 {
@@ -20,45 +20,42 @@ namespace BubbleBurst.Bot
 
         public GameMove Solve()
         {
-            var first = new GameMove(_grid);
+            var root = new GameMove(_grid);
 
-            GameMove topState = first;
+            GameMove topState = root;
 
             Func<GameMove, IEnumerable<GameMove>> topThreeSelectionStrategy =
                 x => x.GridState.Groups
-                      .OrderByDescending(y => y.Score).Take(3)
-                      .Select(y => x.BurstBubble(y.Locations.First()));
+                    .OrderByDescending(y => y.Score).Take(3)
+                    .Select(y => x.BurstBubble(y.Locations.First()));
 
             Func<GameMove, IEnumerable<GameMove>> allSelectionStrategy =
                 x => x.GridState.Groups
-                      .Select(y => x.BurstBubble(y.Locations.First()));
+                    .Select(y => x.BurstBubble(y.Locations.First()));
 
-            var treeRoot = new LazyGeneratedTree<GameMove>(first, topThreeSelectionStrategy);
+            var treeRoot = new LazyGeneratedTree<GameMove>(root, topThreeSelectionStrategy);
 
             var watch = new Stopwatch();
             watch.Start();
 
-            var increment = 10;
-            Parallel.ForEach(treeRoot.GetEnumerable(TreeTraversalType.BreadthFirst, TreeTraversalDirection.TopDown),
-                (node, state) =>
-                {
-                    var totalSeconds = Math.Floor(watch.Elapsed.TotalSeconds);
-                    if ((int)totalSeconds == increment)
-                    {
-                        Console.WriteLine($"{MoveCount} moves in {totalSeconds}");
-                        increment += 10;
-                    }
+            long nodeCount = 0;
+            foreach (var node in treeRoot.GetEnumerable(TreeTraversalType.BreadthFirst, TreeTraversalDirection.TopDown))
+            {
+                if (nodeCount%1000 == 0 && nodeCount > 0)
+                    Log.Debug("{NodeCount} nodes processed in {TotalSeconds} seconds with max score of {TopScore}", 
+                        nodeCount, watch.Elapsed.TotalSeconds, topState.Score);
 
-                    if (node.Value.Score > topState.Score)
-                    {
-                        topState = node.Value;
-                        Console.WriteLine($"Top score found: {node.Value.Score}");
-                        Console.WriteLine(string.Join(", ",
-                            topState.Moves.Select(x => $"({x.Point.X},{x.Point.Y})({x.Colour})")));
-                        Console.WriteLine($"Move count: {MoveCount}");
-                        Console.WriteLine($"Elapsed: {watch.Elapsed.TotalSeconds}");
-                    }
-                });
+                if (node.Value.Score > topState.Score)
+                {
+                    topState = node.Value;
+
+                    Log.Information(
+                        "Top score found: {TopScore} at depth {Depth} after {NodesProcessed} searched nodes in {TotalSeconds} seconds",
+                        node.Value.Score,node.Value.Moves.Count, nodeCount, watch.Elapsed.TotalSeconds);
+                }
+
+                nodeCount++;
+            }
 
             return topState;
         }

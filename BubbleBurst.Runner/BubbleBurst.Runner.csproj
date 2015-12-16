@@ -33,6 +33,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.1.5.7\lib\net45\Serilog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.1.5.7\lib\net45\Serilog.FullNetFx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.Sinks.Literate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.Literate.1.2.0\lib\net45\Serilog.Sinks.Literate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BubbleBurst.Bot\BubbleBurst.Bot.csproj">
@@ -66,6 +79,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Games\Game2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Games\Game3.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

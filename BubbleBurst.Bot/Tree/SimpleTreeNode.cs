@@ -169,18 +169,18 @@ namespace System.Collections.Generic
                 yield break;
             }
 
-            var queue = new ConcurrentPriorityQueue<SimpleTreeNode<T>>();
-            queue.TryAdd(this);
+            var queue = new Queue<SimpleTreeNode<T>>();
+            queue.Enqueue(this);
             
             while (queue.Count > 0)
             {
                 GridSolver.MoveCount++;
 
-                SimpleTreeNode<T> node = queue.Take();
+                SimpleTreeNode<T> node = queue.Dequeue();
 
                 foreach (SimpleTreeNode<T> child in node.Children)
                 {
-                    queue.Add(child);
+                    queue.Enqueue(child);
                 }
 
                 yield return node;
