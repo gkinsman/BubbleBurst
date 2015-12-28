@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using BubbleBurst.Game.Extensions;
 
-namespace BubbleBurst.Game
+namespace BubbleBurst.Game  
 {
     public static class GameMoveExtensions
     {
@@ -87,7 +87,7 @@ namespace BubbleBurst.Game
 
         private static int CalcPositionScore(int moveCount, int score)
         {
-            return Math.Abs(score - (moveCount ^ 2));
+            return Math.Abs(score - (moveCount *10));
         }
     }
 }

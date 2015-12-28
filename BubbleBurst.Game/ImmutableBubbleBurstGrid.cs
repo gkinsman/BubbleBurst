@@ -29,12 +29,12 @@ namespace BubbleBurst.Game
 
         private readonly BubbleGroupFinder _groupFinder;
 
-        public ImmutableBubbleBurstGrid(InternalGrid grid)
+        public ImmutableBubbleBurstGrid(InternalGrid grid, IEnumerable<BubbleGroup> parentsFinder = null)
         {
             Grid = grid;
             Width = grid.Width();
             Height = grid.Height();
-            _groupFinder = new BubbleGroupFinder(this);
+            _groupFinder = new BubbleGroupFinder(this, parentsFinder);
 
         }
 

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using BubbleBurst.Game.Extensions;
 
 namespace BubbleBurst.Game
@@ -12,9 +14,9 @@ namespace BubbleBurst.Game
             this._gridBuilder = grid;
         }
 
-        public ImmutableBubbleBurstGrid ToImmutable()
+        public ImmutableBubbleBurstGrid ToImmutable(IEnumerable<BubbleGroup> parentGroups = null)
         {
-            return new ImmutableBubbleBurstGrid(_gridBuilder.ToImmutableGrid());
+            return new ImmutableBubbleBurstGrid(_gridBuilder.ToImmutableGrid(), parentGroups);
         }
 
         public Bubble this[int col, int row]

@@ -176,7 +176,7 @@ namespace BubbleBurst.Game.Extensions
             gridBuilder.JumpTillTheresNoGaps();
             gridBuilder.PushColumnsRight();
 
-            return Tuple.Create(gridBuilder.ToImmutable(), pointsGroup.Score, pointsGroup.Colour);
+            return Tuple.Create(gridBuilder.ToImmutable(grid.Groups), pointsGroup.Score, pointsGroup.Colour);
         }
 
         public static void JumpTillTheresNoGaps(this Builder grid)

@@ -8,32 +8,34 @@ namespace BubbleBurst.Game
 {
     public class BubbleGroupFinder
     {
-        public BubbleGroupFinder(ImmutableBubbleBurstGrid grid)
+        public BubbleGroupFinder(ImmutableBubbleBurstGrid grid, IEnumerable<BubbleGroup> parentsGroups)
         {
             _grid = grid;
+            //_parentGroups = parentsGroups ?? Enumerable.Empty<BubbleGroup>();
         }
 
         private readonly ImmutableBubbleBurstGrid _grid;
         private BubbleGroup _currentGroup;
+        private IEnumerable<BubbleGroup> _parentGroups;
 
         public IEnumerable<BubbleGroup> Find()
         {
             var groups = new List<BubbleGroup>();
 
-            //iterate over grid
+            // If a group is still valid for this grid, we don't need to search for it again
+            // Turns out this is a bad optimisation - needs profiling
+            //groups.AddRange(_parentGroups.Where(x => x.IsValidFor(_grid)));
+
             for (int i = 0; i < _grid.Height; i++)
             {
                 for (int j = 0; j < _grid.Width; j++)
                 {
-                    //if the current point isnt already part of a bubble group
                     if (!groups.Any(x => x.Locations.Contains(new Point(j, i))))
                     {
-                        //reset current group
                         _currentGroup = new BubbleGroup();
                         FindBubbleGroup(j, i);
                         if (_currentGroup.Locations.Count > 1 && _currentGroup.Colour != Bubble.None)
                         {
-                            //new group!
                             groups.Add(_currentGroup);
                             yield return _currentGroup;
                         }

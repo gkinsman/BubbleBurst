@@ -1,21 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using BubbleBurst.Game;
+using BubbleBurst.Game.Extensions;
+using Newtonsoft.Json;
 using Serilog;
+using Serilog.Formatting.Json;
 
 namespace BubbleBurst.Bot
 {
     public class GridSolver
     {
         private readonly ImmutableBubbleBurstGrid _grid;
+        private readonly StreamWriter _writer;
+        private readonly CancellationToken _token;
 
         public static long MoveCount { get; set; }
 
-        public GridSolver(ImmutableBubbleBurstGrid grid)
+        public GridSolver(ImmutableBubbleBurstGrid grid, StreamWriter writer, CancellationToken token)
         {
             _grid = grid;
+            _writer = writer;
+            _token = token;
         }
 
         public GameMove Solve()
@@ -33,14 +43,22 @@ namespace BubbleBurst.Bot
                 x => x.GridState.Groups
                     .Select(y => x.BurstBubble(y.Locations.First()));
 
-            var treeRoot = new LazyGeneratedTree<GameMove>(root, topThreeSelectionStrategy);
+            var treeRoot = new LazyGeneratedTree<GameMove>(root, allSelectionStrategy);
+
+            var scores = new List<TopScore>();
 
             var watch = new Stopwatch();
             watch.Start();
 
-            long nodeCount = 0;
+            int nodeCount = 0;
             foreach (var node in treeRoot.GetEnumerable(TreeTraversalType.BreadthFirst, TreeTraversalDirection.TopDown))
             {
+                if (_token.IsCancellationRequested)
+                {
+                    WriteResults(scores);
+                    return topState;
+                }
+
                 if (nodeCount%1000 == 0 && nodeCount > 0)
                     Log.Debug("{NodeCount} nodes processed in {TotalSeconds} seconds with max score of {TopScore}", 
                         nodeCount, watch.Elapsed.TotalSeconds, topState.Score);
@@ -52,12 +70,39 @@ namespace BubbleBurst.Bot
                     Log.Information(
                         "Top score found: {TopScore} at depth {Depth} after {NodesProcessed} searched nodes in {TotalSeconds} seconds",
                         node.Value.Score,node.Value.Moves.Count, nodeCount, watch.Elapsed.TotalSeconds);
+
+                    node.Value.GridState.Display();
+
+                    scores.Add(new TopScore(node.Value.Score, node.Value.Moves.Count, watch.Elapsed, nodeCount));
                 }
 
                 nodeCount++;
             }
 
             return topState;
+        }
+
+        private void WriteResults(List<TopScore> scores)
+        {
+            _writer.BaseStream.Seek(0, SeekOrigin.Begin);
+            _writer.Write(JsonConvert.SerializeObject(scores));
+        }
+
+        class TopScore
+        {
+            public TopScore(int score, int depth, TimeSpan elapsed, int totalMoveCount)
+            {
+                Score = score;
+                Depth = depth;
+                Elapsed = elapsed;
+                TotalMoveCount = totalMoveCount;
+            }
+
+            public int Score { get; set; }
+            public int Depth { get; set; }
+            public TimeSpan Elapsed { get; set; }
+            public int TotalMoveCount { get; set; }
+
         }
     }
 }
