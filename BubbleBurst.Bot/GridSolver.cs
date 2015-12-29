@@ -18,14 +18,16 @@ namespace BubbleBurst.Bot
         private readonly ImmutableBubbleBurstGrid _grid;
         private readonly StreamWriter _writer;
         private readonly CancellationToken _token;
+        private readonly int _depthPenalty;
 
         public static long MoveCount { get; set; }
 
-        public GridSolver(ImmutableBubbleBurstGrid grid, StreamWriter writer, CancellationToken token)
+        public GridSolver(ImmutableBubbleBurstGrid grid, StreamWriter writer, CancellationToken token, int depthPenalty)
         {
             _grid = grid;
             _writer = writer;
             _token = token;
+            _depthPenalty = depthPenalty;
         }
 
         public GameMove Solve()
@@ -45,13 +47,15 @@ namespace BubbleBurst.Bot
 
             var treeRoot = new LazyGeneratedTree<GameMove>(root, allSelectionStrategy);
 
+            var comparer = new DepthPenaliserComparer(_depthPenalty);
+
             var scores = new List<TopScore>();
 
             var watch = new Stopwatch();
             watch.Start();
 
             int nodeCount = 0;
-            foreach (var node in treeRoot.GetEnumerable(TreeTraversalType.BreadthFirst, TreeTraversalDirection.TopDown))
+            foreach (var node in treeRoot.GetPriorityFirstEnumerable(comparer))
             {
                 if (_token.IsCancellationRequested)
                 {
@@ -84,7 +88,6 @@ namespace BubbleBurst.Bot
 
         private void WriteResults(List<TopScore> scores)
         {
-            _writer.BaseStream.Seek(0, SeekOrigin.Begin);
             _writer.Write(JsonConvert.SerializeObject(scores));
         }
 

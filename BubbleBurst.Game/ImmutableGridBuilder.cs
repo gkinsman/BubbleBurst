@@ -7,16 +7,16 @@ namespace BubbleBurst.Game
 {
     public class Builder
     {
-        private readonly ImmutableList<ImmutableList<Bubble>.Builder>.Builder _gridBuilder;
+        private readonly ImmutableList<ImmutableList<Bubble>>.Builder _gridBuilder;
 
-        internal Builder(ImmutableList<ImmutableList<Bubble>.Builder>.Builder grid)
+        internal Builder(ImmutableList<ImmutableList<Bubble>>.Builder grid)
         {
             this._gridBuilder = grid;
         }
 
         public ImmutableBubbleBurstGrid ToImmutable(IEnumerable<BubbleGroup> parentGroups = null)
         {
-            return new ImmutableBubbleBurstGrid(_gridBuilder.ToImmutableGrid(), parentGroups);
+            return new ImmutableBubbleBurstGrid(_gridBuilder.ToImmutable(), parentGroups);
         }
 
         public Bubble this[int col, int row]
@@ -27,7 +27,9 @@ namespace BubbleBurst.Game
             }
             set
             {
-                this._gridBuilder[row][col] = value;
+                var list = _gridBuilder[row].ToBuilder();
+                list[col] = value;
+                _gridBuilder[row] = list.ToImmutable();
             }
         }
 

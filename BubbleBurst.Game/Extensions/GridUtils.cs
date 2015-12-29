@@ -40,10 +40,9 @@ namespace BubbleBurst.Game.Extensions
             return ImmutableList.Create(innerImmutables);
         }
 
-        public static InternalGridBuilder.Builder ToGridBuilder(this InternalGrid grid)
+        public static InternalGrid.Builder ToGridBuilder(this InternalGrid grid)
         {
-            var builder = ImmutableList.CreateBuilder<ImmutableList<Bubble>.Builder>();
-            builder.AddRange(grid.Select(x => x.ToBuilder()));
+            var builder = grid.ToBuilder();
 
             return builder;
         }
@@ -58,12 +57,12 @@ namespace BubbleBurst.Game.Extensions
             return grid[0].Count;
         }
 
-        public static int Height(this InternalGridBuilder.Builder grid)
+        public static int Height(this InternalGrid.Builder grid)
         {
             return grid.Count;
         }
 
-        public static int Width(this InternalGridBuilder.Builder grid)
+        public static int Width(this InternalGrid.Builder grid)
         {
             return grid[0].Count;
         }

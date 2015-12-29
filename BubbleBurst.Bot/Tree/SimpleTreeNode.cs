@@ -5,7 +5,9 @@
 using System;
 using System.Text;
 using BubbleBurst.Bot;
+using BubbleBurst.Game;
 using DataStructures;
+using Serilog;
 
 namespace System.Collections.Generic
 {
@@ -134,6 +136,29 @@ namespace System.Collections.Generic
             }
         }
 
+        public IEnumerable<SimpleTreeNode<T>> GetPriorityFirstEnumerable(IComparer<SimpleTreeNode<T>> comparer)
+        {
+            var queue = new PriorityQueue<SimpleTreeNode<T>>(comparer);
+            queue.Add(this);
+
+            while (queue.Count > 0)
+            {
+                GridSolver.MoveCount++;
+
+                SimpleTreeNode<T> node = queue.Take();
+
+                foreach (SimpleTreeNode<T> child in node.Children)
+                {
+                    queue.Add(child);
+                    if (queue.Count % 1000 == 0) Log.Debug("Queue size: {QueueSize}", queue.Count);
+
+                }
+
+
+                yield return node;
+            }
+        }
+
         private IEnumerable<SimpleTreeNode<T>> GetDepthFirstEnumerable(TreeTraversalDirection TraversalDirection)
         {
             if (TraversalDirection == TreeTraversalDirection.TopDown)
@@ -182,6 +207,8 @@ namespace System.Collections.Generic
                 {
                     queue.Enqueue(child);
                 }
+
+                if(queue.Count % 1000 == 0) Log.Debug("Queue size: {QueueSize}", queue.Count);
 
                 yield return node;
             }
