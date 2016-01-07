@@ -17,20 +17,18 @@ namespace BubbleBurst.Bot
     {
         private readonly ImmutableBubbleBurstGrid _grid;
         private readonly StreamWriter _writer;
-        private readonly CancellationToken _token;
         private readonly int _depthPenalty;
 
         public static long MoveCount { get; set; }
 
-        public GridSolver(ImmutableBubbleBurstGrid grid, StreamWriter writer, CancellationToken token, int depthPenalty)
+        public GridSolver(ImmutableBubbleBurstGrid grid, StreamWriter writer, int depthPenalty)
         {
             _grid = grid;
             _writer = writer;
-            _token = token;
             _depthPenalty = depthPenalty;
         }
 
-        public GameMove Solve()
+        public GameMove Solve(int maxMoves)
         {
             var root = new GameMove(_grid);
 
@@ -45,7 +43,23 @@ namespace BubbleBurst.Bot
                 x => x.GridState.Groups
                     .Select(y => x.BurstBubble(y.Locations.First()));
 
-            var treeRoot = new LazyGeneratedTree<GameMove>(root, allSelectionStrategy);
+            Func<GameMove, IEnumerable<GameMove>> selectLeastCommonBubblesFirst =
+                move =>
+                {
+                    var chosen =
+                        move.GridState.Statistics.OrderBy(x => x.Value)
+                            .Where(x => move.GridState.Groups.Any(group => group.Colour == x.Key))
+                            .Select(x => x.Key).Take(2);
+
+                    var taken = move.GridState.Groups.Where(x => chosen.Contains(x.Colour)).Take(3);
+                    return taken.Select(x => move.BurstBubble(x.Locations.First()));
+                };
+                
+
+            /* x => x.GridState.Groups
+                 .Select(y => ).GridState.Statistics.OrderByDescending(x => x.Value)*/
+
+            var treeRoot = new LazyGeneratedTree<GameMove>(root, selectLeastCommonBubblesFirst);
 
             var comparer = new DepthPenaliserComparer(_depthPenalty);
 
@@ -55,11 +69,13 @@ namespace BubbleBurst.Bot
             watch.Start();
 
             int nodeCount = 0;
-            foreach (var node in treeRoot.GetPriorityFirstEnumerable(comparer))
+            var moves = treeRoot.GetPriorityFirstEnumerable(comparer);
+            foreach (var node in moves)
             {
-                if (_token.IsCancellationRequested)
+                if (nodeCount > maxMoves)
                 {
                     WriteResults(scores);
+
                     return topState;
                 }
 

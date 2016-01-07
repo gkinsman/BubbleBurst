@@ -13,11 +13,6 @@ namespace BubbleBurst.Runner
     {
         private static void Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.LiterateConsole()
-                .MinimumLevel.Debug()
-                .CreateLogger();
-
             Parser.RunConsole<BubbleBurstApp>(args);
 
             Console.ReadLine();

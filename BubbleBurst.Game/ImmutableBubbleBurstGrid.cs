@@ -22,8 +22,16 @@ namespace BubbleBurst.Game
         public int Width { get; }
         public int Height { get; }
 
-        private IEnumerable<BubbleGroup> _groups;
-        public IEnumerable<BubbleGroup> Groups => _groups ?? (_groups = _groupFinder.Find());
+        private BubbleGroupFinderResult _finderResult;
+        public IEnumerable<BubbleGroup> Groups => CalcGroups().Groups;
+        public IDictionary<Bubble, int> Statistics => CalcGroups().Statistics;
+
+        private BubbleGroupFinderResult CalcGroups()
+        {
+            if (_finderResult != null) return _finderResult;
+            _finderResult = _groupFinder.Find();
+            return _finderResult;
+        }
 
         public bool GameEnded => !Groups.Any();
 

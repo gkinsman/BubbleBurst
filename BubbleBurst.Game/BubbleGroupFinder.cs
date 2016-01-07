@@ -11,14 +11,16 @@ namespace BubbleBurst.Game
         public BubbleGroupFinder(ImmutableBubbleBurstGrid grid, IEnumerable<BubbleGroup> parentsGroups)
         {
             _grid = grid;
+            _stats = new Dictionary<Bubble, int>();
             //_parentGroups = parentsGroups ?? Enumerable.Empty<BubbleGroup>();
         }
 
         private readonly ImmutableBubbleBurstGrid _grid;
+        private Dictionary<Bubble, int> _stats;
         private BubbleGroup _currentGroup;
         private IEnumerable<BubbleGroup> _parentGroups;
 
-        public IEnumerable<BubbleGroup> Find()
+        public BubbleGroupFinderResult Find()
         {
             var groups = new List<BubbleGroup>();
 
@@ -26,22 +28,25 @@ namespace BubbleBurst.Game
             // Turns out this is a bad optimisation - needs profiling
             //groups.AddRange(_parentGroups.Where(x => x.IsValidFor(_grid)));
 
-            for (int i = 0; i < _grid.Height; i++)
+            for (int y = 0; y < _grid.Height; y++)
             {
-                for (int j = 0; j < _grid.Width; j++)
+                for (int x = 0; x < _grid.Width; x++)
                 {
-                    if (!groups.Any(x => x.Locations.Contains(new Point(j, i))))
+                    if(!_stats.ContainsKey(_grid[x,y])) _stats.Add(_grid[x,y], 1);
+                    else _stats[_grid[x, y]]++;
+
+                    if (!groups.Any(group => group.Locations.Contains(new Point(x, y))))
                     {
                         _currentGroup = new BubbleGroup();
-                        FindBubbleGroup(j, i);
+                        FindBubbleGroup(x, y);
                         if (_currentGroup.Locations.Count > 1 && _currentGroup.Colour != Bubble.None)
                         {
                             groups.Add(_currentGroup);
-                            yield return _currentGroup;
                         }
                     }
                 }
             }
+            return new BubbleGroupFinderResult(groups, _stats);
         }
 
         private void FindBubbleGroup(int x, int y)

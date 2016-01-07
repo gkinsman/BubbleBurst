@@ -17,27 +17,12 @@ namespace BubbleBurst.Game.Extensions
 {
     public static class BubbleGridExtensions
     {
-        /// <summary>
-        /// Transposes the given point such that the origin (0,0) is
-        /// in the bottom right corner.
-        /// </summary>
-        /// <param name="point"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
-        public static Point Transpose(this Point point, int width, int height)
-        {
-            var newCol = (width - 1) - point.X;
-            var newRow = (height - 1) - point.Y;
-            Debug.Assert(newCol < width && newCol >= 0);
-            Debug.Assert(newRow < height && newRow >= 0);
-            return new Point(newCol, newRow);
-        }
 
         public static InternalGrid ToImmutableGrid(this InternalGridBuilder.Builder builder)
         {
             var innerImmutables = builder.Select(x => x.ToImmutable()).ToArray();
             return ImmutableList.Create(innerImmutables);
+
         }
 
         public static InternalGrid.Builder ToGridBuilder(this InternalGrid grid)

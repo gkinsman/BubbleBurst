@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Channels;
 using BubbleBurst.Game.Extensions;
 
 namespace BubbleBurst.Game
@@ -32,7 +30,10 @@ namespace BubbleBurst.Game
             var width = lines[0].Length;
             Debug.Assert(lines.All(x => x.Length == width));
 
-            var array = lines.Select(x => x.Select(c => c.ToBubble()).ToArray()).ToArray();
+            var array = lines
+                .Select(x => x
+                    .Select(c => c.ToBubble()).ToArray())
+                .ToArray();
 
             return Create(array);
         }

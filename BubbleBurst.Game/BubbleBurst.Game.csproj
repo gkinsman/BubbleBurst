@@ -45,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BubbleGridStats.cs" />
     <Compile Include="Bubble.cs" />
+    <Compile Include="BubbleGroupFinderResult.cs" />
     <Compile Include="GameMove.cs" />
     <Compile Include="ImmutableBubbleBurstGrid.cs" />
     <Compile Include="BubbleGridBuilder.cs" />

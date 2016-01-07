@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BubbleBurst.Game;
 
 namespace BubbleBurst.Bot
@@ -41,16 +42,18 @@ namespace BubbleBurst.Bot
 
             //Lets start with 10 points.
 
-            var thisScore = CalcPositionScore(thisMoveCount, first.Score);
-            var otherScore = CalcPositionScore(otherMoveCount, second.Score);
+            var thisScore = CalcPositionScore(first);
+            var otherScore = CalcPositionScore(second);
 
             if (thisScore == otherScore) return 0;
             return thisScore > otherScore ? -1 : 1;
         }
 
-        private int CalcPositionScore(int moveCount, int score)
+        private int CalcPositionScore(GameMove move)
         {
-            return Math.Abs(score - (moveCount*_depthPenalty));
+            var baseScore = Math.Abs(move.Score - (move.Moves.Count*_depthPenalty));
+      
+            return baseScore;
         }
     }
 }

@@ -154,7 +154,6 @@ namespace System.Collections.Generic
 
                 }
 
-
                 yield return node;
             }
         }
