@@ -65,6 +65,7 @@ namespace BubbleBurst.Bot
             watch.Start();
 
             int nodeCount = 0;
+            //var moves = treeRoot.GetEnumerable(TreeTraversalType.BreadthFirst, TreeTraversalDirection.TopDown);
             var moves = treeRoot.GetPriorityFirstEnumerable(comparer);
             foreach (var node in moves)
             {
