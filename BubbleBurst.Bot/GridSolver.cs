@@ -55,10 +55,6 @@ namespace BubbleBurst.Bot
                     return taken.Select(x => move.BurstBubble(x.Locations.First()));
                 };
                 
-
-            /* x => x.GridState.Groups
-                 .Select(y => ).GridState.Statistics.OrderByDescending(x => x.Value)*/
-
             var treeRoot = new LazyGeneratedTree<GameMove>(root, selectLeastCommonBubblesFirst);
 
             var comparer = new DepthPenaliserComparer(_depthPenalty);
