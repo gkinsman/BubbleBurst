@@ -1,6 +1,13 @@
 
-I've made a few notes on the implementation of 
+I've made a few notes on my implementation of the game as a guide for interested readers. As a note but not an excuse, this code has evolved over quite a long time and so there are parts that I haven't taken a lot of care with to refactor. 
 
+An exploration of the game itself can be found on my blog [http://georgekinsman.com](http://georgekinsman.com):
+
+[Part 1 - Introduction](http://georgekinsman.com/programming/2015/12/17/Bubble-Burst-Part-1.html)
+
+[Part 2 - Heuristics](http://georgekinsman.com/programming/2016/01/10/Bubble-Burst-Part-2.html)
+
+Thanks for reading! 
 
 ### Immutability
 
